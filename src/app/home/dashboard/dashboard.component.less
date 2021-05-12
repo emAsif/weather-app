@@ -25,11 +25,11 @@ p {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 40px;
   display: flex;
   align-items: center;
-  background-color: #1976d2;
-  color: white;
+  background-color: #fff;
+  color: black;
   font-weight: 600;
 }
 
@@ -54,7 +54,7 @@ p {
 
 .content {
   display: flex;
-  margin: 82px auto 32px;
+  margin: 170px auto 32px;
   padding: 0 16px;
   max-width: 960px;
   flex-direction: column;
@@ -81,12 +81,22 @@ p {
   margin-top: 16px;
 }
 
+.search-card {
+  border-radius: 4px;
+  border: 1px solid #eee;
+
+  input {
+    padding: 6px 2px;
+    width: 150px;
+  }
+}
 .card {
   border-radius: 4px;
   border: 1px solid #eee;
   background-color: #fafafa;
-  height: 40px;
-  width: 200px;
+  width: 310px;
+  //height: 40px;
+  height: 200px;
   margin: 0 8px 16px;
   padding: 16px;
   display: flex;
@@ -97,18 +107,18 @@ p {
   line-height: 24px;
 }
 
-.card-container .card:not(:last-child) {
-  margin-right: 0;
-}
+//.card-container .card:not(:last-child) {
+//  margin-right: 0;
+//}
 
-.card.card-small {
-  height: 16px;
-  width: 168px;
-}
+//.card.card-small {
+//  height: 12px;
+//  width: 168px;
+//}
 
-.card-container .card:not(.highlight-card) {
-  cursor: pointer;
-}
+//.card-container .card:not(.highlight-card) {
+//  cursor: pointer;
+//}
 
 .card-container .card:not(.highlight-card):hover {
   transform: translateY(-3px);
@@ -119,15 +129,15 @@ p {
   fill: rgb(105, 103, 103);
 }
 
-.card.highlight-card {
-  background-color: #1976d2;
-  color: white;
-  font-weight: 600;
-  border: none;
-  width: auto;
-  min-width: 30%;
-  position: relative;
-}
+//.card.highlight-card {
+//  //background-color: #1976d2;
+//  //color: white;
+//  //font-weight: 600;
+//  border: none;
+//  width: auto;
+//  min-width: 20%;
+//  position: relative;
+//}
 
 /*.card.card.highlight-card span {*/
 /*  margin-left: 60px;*/
@@ -233,7 +243,7 @@ footer a {
   }
 
   .card:not(.highlight-card) {
-    height: 16px;
+    height: auto;
     margin: 8px 0;
   }
 
@@ -248,3 +258,17 @@ footer a {
 /*    visibility: hidden;*/
 /*  }*/
 /*}*/
+
+video {
+  position       : fixed;
+  top            : 50%;
+  left           : 50%;
+  min-width      : 100vw;
+  min-height     : 100vh;
+  width          : auto;
+  height         : auto;
+  z-index        : -100;
+  transform      : translateX(-50%) translateY(-50%);
+  background-size: cover;
+  transition     : 1s opacity;
+}
