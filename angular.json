@@ -34,7 +34,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.less",
+              "src/assets/css/fa-light.css",
+              "src/assets/css/vendors.bundle.css"
             ],
             "scripts": []
           },
