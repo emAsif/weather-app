@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from 'src/environments/environment';
 import {Observable} from 'rxjs';
-import {WeatherReport} from '../types/weatherReport';
+import {IWeatherReport} from '../models/IWeatherReport';
+import {IForecast} from '../models/IForecast';
+import {TempUnit} from '../models/tempUnit';
 
 const apiKey: string = environment.apiKey;
 
@@ -12,11 +14,11 @@ const apiKey: string = environment.apiKey;
 export class WeatherService {
   constructor(private http: HttpClient) { }
 
-  getCurrentWeather(loc: string): Observable<WeatherReport> {
-    return this.http.get(`${environment.apiUrl}/weather?q=${loc}&appid=${apiKey}`) as Observable<WeatherReport>;
+  getCurrentWeather(loc: string, unit: TempUnit): Observable<IWeatherReport> {
+    return this.http.get(`${environment.apiUrl}/weather?q=${loc}&units=${unit}&appid=${apiKey}`) as Observable<IWeatherReport>;
   }
 
-  getForecast(loc: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/forecast?q=${loc}&appid=${apiKey}`);
+  getForecast(loc: string, unit: TempUnit): Observable<IForecast> {
+    return this.http.get(`${environment.apiUrl}/forecast?q=${loc}&units=${unit}&appid=${apiKey}`) as Observable<IForecast>;
   }
 }
