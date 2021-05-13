@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {WeatherService} from '../../shared/services/weather.service';
-import {interval} from 'rxjs';
-import {Report} from '../../shared/models/IWeatherReport';
+import {forkJoin, interval} from 'rxjs';
+import {IWeatherReport, Report} from '../../shared/models/IWeatherReport';
 import {IForecast} from '../../shared/models/IForecast';
 import {TempUnit} from '../../shared/models/tempUnit';
 import {FormGroup} from '@angular/forms';
-import {mergeMap} from 'rxjs/operators';
+import {map, merge, mergeMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,64 +38,37 @@ export class DashboardComponent implements OnInit {
   }
 
   onSearch(city: string): void {
-    this.getCurrentWeather(city);
-    this.getHourlyForecast(city);
+    this.weatherUpdates(city);
     this.timeInterval.subscribe(() => {
-      this.getCurrentWeather(city);
-      this.getHourlyForecast(city);
+      this.weatherUpdates(city);
     });
   }
-  getCurrentWeather(city: string): void{
-    this.isLoading = true;
-    this.weatherService.getCurrentWeather(city).subscribe(response => {
-      this.report =
-        {
-          temp: response.main.temp,
-          icon: response.weather[0].icon,
-          description: response.weather[0].description,
-          city: response.name
-        };
-      this.isLoading = false;
-      this.error = false;
-      this.msg = 'Enter the location to check the current and forecast weather';
-    }, error => {
-      this.isLoading = false;
-      this.msg = 'API Error: Either the Location is invalid or not supported';
-      this.error = true;
-    });
-  }
-  getHourlyForecast(loc: string): void {
-    this.weatherService.getForecast(loc, TempUnit.Metric).subscribe(response => {
-        this.forecast = response;
-        this.isLoading = false;
-        this.msg = 'Enter the location to check the current and forecast weather';
-        this.error = false;
+  weatherUpdates(location: string): void {
+    forkJoin({
+      weatherReport: this.weatherService.getCurrentWeather(location, TempUnit.Metric),
+      forecast: this.weatherService.getForecast(location, TempUnit.Metric)
+    }).subscribe(({weatherReport, forecast}) => {
+          this.forecast = forecast;
+          this.report =
+          {
+            temp: weatherReport.main.temp,
+            icon: weatherReport.weather[0].icon,
+            description: weatherReport.weather[0].description,
+            city: weatherReport.name
+          };
+          this.isLoading = false;
+          this.error = false;
+          this.msg = 'Enter the location to check the current and forecast weather';
       }, error => {
-      this.isLoading = false;
-      this.msg = 'API Error: Either the Location is invalid or not supported';
-      this.error = true;
+        this.isLoading = false;
+        this.msg = 'API Error: Either the Location is invalid or not supported';
+        this.error = true;
       });
-  }
-
-  changeWeatherUnit(unit: TempUnit): void{
-    switch (unit){
-      case TempUnit.Standard:
-        // TODO APPLY FORMULA FOR TEMP UNIT CONVERSION:
-        break;
-      case TempUnit.Metric:
-        // TODO APPLY FORMULA FOR TEMP UNIT CONVERSION:
-        break;
-      case TempUnit.Imperial:
-        // TODO APPLY FORMULA FOR TEMP UNIT CONVERSION:
-        break;
-      default:
-        break;
-    }
   }
 
   submit(form: FormGroup): void{
     if (form.status === 'VALID') {
-      this.onSearch(form.value.location);
+      this.weatherUpdates(form.value.location);
     }
   }
 }
