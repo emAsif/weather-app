@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
       this.weatherUpdates(location, unit); // first independent call to API
 
       clearInterval(this.startInterval);
-      this.startInterval = setInterval(() => this.weatherUpdates(location, unit), 10000);
+      this.startInterval = setInterval(() => this.weatherUpdates(location, unit), 100000);
     }
   }
 }

@@ -1,7 +1,5 @@
 <div class="dashboard-main">
-  <!-- displays error -->
-<!--  <div [ngClass]="error ?'error-div':'notify-div'">{{msg}}</div>-->
-  <!-- alert messages -->
+  <!--  notification update based on response status-->
   <div *ngIf="msg.statusCode!" [ngClass]="{
             'notify-div':msg.statusCode === 100,
             'success-div':msg.statusCode === 200,
@@ -15,13 +13,13 @@
 
     <form #searchForm="ngForm" (ngSubmit)="submit(searchForm.form)">
       <div class="form-group radio-group" (change)="submit(searchForm.form)">
-        <label><h3>Choose weather unit for desired result.</h3></label>
+        <div class="p-b"><h3>You can try other measuring units</h3><small>Celsius is default.</small></div>
         <div class="m-b">
           <div class="form-control radio-btn" *ngFor="let u of units">
-            <label style="cursor: pointer">
+            <span style="cursor: pointer">
               <input type="radio" name="unit" value="{{u.des}}" [ngModel]='unit'>
               {{u.name}}
-            </label>
+            </span>
           </div>
         </div>
       </div>
@@ -40,36 +38,34 @@
       </div>
     </form>
   </div>
-
+  <!--  card-container display the current and forecast weather-->
   <div class="card-container" *ngIf="!isLoading && !error">
     <div class="card" [@fadeInOut]>
       <h2>Current Weather</h2>
 
       <img src="http://openweathermap.org/img/wn/{{report!.icon}}@2x.png" width="100" height="100"/>
+      <b>{{report!.description}}</b>
       <b>{{report!.icon.endsWith('n') ? 'Night' : 'Day'}}</b>
       <b>{{report!.city}}</b>
       <b>{{report!.temp | number: '1.0-0'}}
         {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}}
       </b>
-      <b>{{report!.description}}</b>
-
     </div>
 
     <div *ngIf="!isLoading" class="card forecast-container" [@fadeInOut]>
       <h2>Weather Forecast</h2>
       <div *ngFor="let item of forecast?.list" class="forecast-margin">
-
-        <div class="inline">
+        <div class="inline p-r">
           <img src="http://openweathermap.org/img/wn/{{item.weather[0].icon}}@2x.png" width="50" height="50"/><br/>
           <br/>
         </div>
-
         <div class="inline">
-          <b>Temperature:&nbsp; {{item?.main?.temp | number: '1.0-0'}}
-            {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}}
-          </b><br/>
-          <b>Description:&nbsp;; {{item.weather[0].description}}</b><br/>
-          <b>Date:&nbsp; {{item.dt_txt}}</b></div>
+          <b>Temperature:</b> {{item?.main?.temp | number: '1.0-0'}}
+          {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}}
+          <br/>
+          <b>Description:</b> {{item.weather[0].description}}<br/>
+          <b>Date:</b> {{item.dt_txt}}
+        </div>
       </div>
     </div>
   </div>
