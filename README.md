@@ -5,7 +5,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 * NO Front-end CSS Framework has been used. only css extension(less) has been used.
 
 * Search city by name
-* Retrieve weather data from public API service http://openweathermap.org/
+* Retrieve weather data from public API service http://openweathermap.org/current
 * Display searched city weather data.
 * Display forecast of the current city for next few days.
 * The data is updated after a 5 seconds.
@@ -25,11 +25,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `ng test` to execute the unit tests.
 
 ## Further help
 
