@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
       this.msg.message = 'API Error: Either the Location is invalid or not supported';
     });
   }
-
+  // Handle API request and interval call
   submit(form: FormGroup): void {
     if (form.valid) {
       const {location, unit} = form.value;
