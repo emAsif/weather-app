@@ -16,7 +16,7 @@
         <div class="p-b"><h3>You can try other measuring units</h3><small>Celsius is default.</small></div>
         <div class="m-b">
           <div class="form-control radio-btn" *ngFor="let u of units">
-            <span style="cursor: pointer">
+            <span>
               <input type="radio" name="unit" value="{{u.des}}" [ngModel]='unit'>
               {{u.name}}
             </span>
@@ -38,21 +38,26 @@
       </div>
     </form>
   </div>
+  <!-- spinner -->
+
+  <div *ngIf="isLoading" class="spinner"></div>
+
   <!--  card-container display the current and forecast weather-->
-  <div class="card-container" *ngIf="!isLoading && !error">
+  <div class="card-container" *ngIf="isRendered && !error">
     <div class="card" [@fadeInOut]>
       <h2>Current Weather</h2>
 
       <img src="http://openweathermap.org/img/wn/{{report!.icon}}@2x.png" width="100" height="100"/>
+      <b>
+        {{report!.temp | number: '1.0-0'}}
+        {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}} &nbsp; in
+        {{report!.city}}
+      </b>
       <b>{{report!.description}}</b>
       <b>{{report!.icon.endsWith('n') ? 'Night' : 'Day'}}</b>
-      <b>{{report!.city}}</b>
-      <b>{{report!.temp | number: '1.0-0'}}
-        {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}}
-      </b>
     </div>
 
-    <div *ngIf="!isLoading" class="card forecast-container" [@fadeInOut]>
+    <div class="card forecast-container" [@fadeInOut]>
       <h2>Weather Forecast</h2>
       <div *ngFor="let item of forecast?.list" class="forecast-margin">
         <div class="inline p-r">
@@ -60,11 +65,11 @@
           <br/>
         </div>
         <div class="inline">
-          <b>Temperature:</b> {{item?.main?.temp | number: '1.0-0'}}
+          <b>Temperature:&nbsp;</b> {{item?.main?.temp | number: '1.0-0'}}
           {{report!.unit === 'imperial' ? '&#8457;' : report!.unit === 'metric' ? '&#8451;' : 'K'}}
           <br/>
-          <b>Description:</b> {{item.weather[0].description}}<br/>
-          <b>Date:</b> {{item.dt_txt}}
+          <b>Description:&nbsp;</b> {{item.weather[0].description}}<br/>
+          <b>Date:</b>&nbsp; {{item.dt_txt | date}}
         </div>
       </div>
     </div>

@@ -23,8 +23,9 @@ import {IMsg} from '../../shared/interfaces/errorMsg';
 
 export class DashboardComponent implements OnInit {
   city: string | undefined;
-  isLoading = true;
+  isLoading: boolean;
   error: boolean;
+  isRendered: boolean;
   startInterval: NodeJS.Timeout;
   report: Report | undefined;
   forecast: IForecast | undefined;
@@ -57,6 +58,7 @@ export class DashboardComponent implements OnInit {
         };
       this.isLoading = false;
       this.error = false;
+      this.isRendered = true;
       this.msg.statusCode = 200;
       this.msg.message = 'Successfully Loaded.';
     }, error => {
@@ -69,6 +71,7 @@ export class DashboardComponent implements OnInit {
   // Handle API request and interval call
   submit(form: FormGroup): void {
     if (form.valid) {
+      this.isLoading = true;
       const {location, unit} = form.value;
       this.weatherUpdates(location, unit); // first independent call to API
 
