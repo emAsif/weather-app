@@ -2,13 +2,20 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.12.
 
+Search city by name.
+Optional: choose weather units. Celius is selected by default.
+Retrieve weather data from public API service http://openweathermap.org/
+Display searched city weather data.
+Display forecast of the current city for next few days.
+The data is updated after a 5 seconds.
+Displaying info, success and error messages.
+Search fields validation implemented.
+
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `npm i`.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng serve --o` for a dev server. Navigate to `http://localhost:4200/`.
 
 ## Build
 
