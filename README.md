@@ -2,14 +2,16 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.12.
 
-Search city by name.
-Optional: choose weather units. Celius is selected by default.
-Retrieve weather data from public API service http://openweathermap.org/
-Display searched city weather data.
-Display forecast of the current city for next few days.
-The data is updated after a 5 seconds.
-Displaying info, success and error messages.
-Search fields validation implemented.
+* NO Front-end CSS Framework has been used. only css extension(less) has been used.
+
+* Search city by name
+* Retrieve weather data from public API service http://openweathermap.org/
+* Display searched city weather data.
+* Display forecast of the current city for next few days.
+* The data is updated after a 5 seconds.
+* Displaying info, success and error messages.
+* Search fields validation implemented.
+* Optional: choose weather units. Celius is selected by default.
 
 ## Development server
 
