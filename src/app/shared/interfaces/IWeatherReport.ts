@@ -1,60 +1,56 @@
-export type WeatherReport = {
+import {IForecast, IWeather} from './IForecast';
+
+export interface IWeatherReport {
   base: string;
-  clouds: clouds;
+  clouds: IClouds;
   cod: number;
-  coord: coord;
+  coord: ICoord;
   dt: number;
   id: number;
-  main: main;
+  main: IMain;
   name: string;
-  sys: sys;
+  sys: ISys;
   timezone: number;
   visibility: number;
-  weather: Weather[];
-  wind: wind;
-};
+  weather: IWeather[];
+  wind: IWind;
+}
 
 export type Report = {
   temp: number;
   icon: string;
   city: string;
   description: string;
+  unit: string;
 };
 
-export type wind = {
+export interface IWind {
   speed: number;
   deg: number;
   gust: number;
-};
+}
 
-export type Weather = {
-  id: number;
-  main: string;
-  description: string;
-  icon: string;
-};
-
-export type sys = {
+export interface ISys {
   type: number;
   id: number;
   country: string;
   sunrise: number;
   sunset: number;
-};
+}
 
-export type clouds = {
+export interface IClouds {
   all: number;
-};
+}
 
-export type coord = {
+export interface ICoord {
   lon: number;
   lat: number;
-};
+}
 
-export type main = {
+export interface IMain {
   temp: number;
   feels_like: number;
-  tamp_min: number;
+  temp_min: number;
   temp_max: number;
   pressure: number;
-};
+}

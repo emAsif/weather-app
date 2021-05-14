@@ -1,75 +1,79 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {WeatherService} from '../../shared/services/weather.service';
-import {forkJoin, interval} from 'rxjs';
-import {IWeatherReport, Report} from '../../shared/models/IWeatherReport';
-import {IForecast} from '../../shared/models/IForecast';
-import {TempUnit} from '../../shared/models/tempUnit';
+import {forkJoin} from 'rxjs';
+import {Report} from '../../shared/interfaces/IWeatherReport';
+import {IForecast} from '../../shared/interfaces/IForecast';
 import {FormGroup} from '@angular/forms';
-import {map, merge, mergeMap} from 'rxjs/operators';
+import {IMsg} from '../../shared/interfaces/errorMsg';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.less'],
   animations: [
-  trigger('fadeInOut', [
-    state('void', style({
-      opacity: 0
-    })),
-    transition('void <=> *', animate(1000)),
-  ])
-]
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0
+      })),
+      transition('void <=> *', animate(1000)),
+    ])
+  ]
 })
 
 export class DashboardComponent implements OnInit {
-  timeInterval = interval(100000);
   city: string | undefined;
   isLoading = true;
-  error: boolean | undefined;
+  error: boolean;
+  startInterval: NodeJS.Timeout;
   report: Report | undefined;
   forecast: IForecast | undefined;
-  location: string | undefined;
-  msg = 'Enter the location to check the current and forecast weather';
+  units = [{name: 'Celsius', des: 'metric'}, {name: 'Fahrenheit', des: 'imperial'}, {name: 'Kelvin', des: 'standard'}];
+  unit = 'metric'; // to keep radio box checked.
 
-  constructor(private readonly weatherService: WeatherService) { }
+  // displaying messages based on current status- by default info message will be loaded.
+  msg: IMsg = { statusCode: 100, message: 'Info: Enter the location to check the current and forecast weather'};
+
+  constructor(private readonly weatherService: WeatherService) {
+  }
 
   ngOnInit(): void {
   }
 
-  onSearch(city: string): void {
-    this.weatherUpdates(city);
-    this.timeInterval.subscribe(() => {
-      this.weatherUpdates(city);
+  // multi subscription handled using forkjoin
+  weatherUpdates(location: string, unit: string): void {
+    forkJoin({
+      weatherReport: this.weatherService.getCurrentWeather(location, unit),
+      forecast: this.weatherService.getForecast(location, unit)
+    }).subscribe(({weatherReport, forecast}) => {
+      this.forecast = forecast;
+      this.report =
+        {
+          temp: weatherReport.main.temp,
+          icon: weatherReport.weather[0].icon,
+          description: weatherReport.weather[0].description,
+          city: weatherReport.name,
+          unit
+        };
+      this.isLoading = false;
+      this.error = false;
+      this.msg.statusCode = 200;
+      this.msg.message = 'Successfully Loaded.';
+    }, error => {
+      this.isLoading = false;
+      this.error = true;
+      this.msg.statusCode = 404;
+      this.msg.message = 'API Error: Either the Location is invalid or not supported';
     });
   }
-  weatherUpdates(location: string): void {
-    forkJoin({
-      weatherReport: this.weatherService.getCurrentWeather(location, TempUnit.Metric),
-      forecast: this.weatherService.getForecast(location, TempUnit.Metric)
-    }).subscribe(({weatherReport, forecast}) => {
-          this.forecast = forecast;
-          this.report =
-          {
-            temp: weatherReport.main.temp,
-            icon: weatherReport.weather[0].icon,
-            description: weatherReport.weather[0].description,
-            city: weatherReport.name
-          };
-          this.isLoading = false;
-          this.error = false;
-          this.msg = 'Enter the location to check the current and forecast weather';
-      }, error => {
-        this.isLoading = false;
-        this.msg = 'API Error: Either the Location is invalid or not supported';
-        this.error = true;
-      });
-  }
 
-  submit(form: FormGroup): void{
-    if (form.status === 'VALID') {
-      this.weatherUpdates(form.value.location);
+  submit(form: FormGroup): void {
+    if (form.valid) {
+      const {location, unit} = form.value;
+      this.weatherUpdates(location, unit); // first independent call to API
+
+      clearInterval(this.startInterval);
+      this.startInterval = setInterval(() => this.weatherUpdates(location, unit), 10000);
     }
   }
 }
-
