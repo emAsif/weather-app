@@ -23,10 +23,10 @@ import {IMsg} from '../../shared/interfaces/errorMsg';
 
 export class DashboardComponent implements OnInit {
   city: string | undefined;
-  isLoading: boolean;
-  error: boolean;
-  isRendered: boolean;
-  startInterval: NodeJS.Timeout;
+  isLoading: boolean | undefined;
+  error: boolean | undefined;
+  isRendered: boolean | undefined;
+  startInterval: any;
   report: Report | undefined;
   forecast: IForecast | undefined;
   units = [{name: 'Celsius', des: 'metric'}, {name: 'Fahrenheit', des: 'imperial'}, {name: 'Kelvin', des: 'standard'}];
